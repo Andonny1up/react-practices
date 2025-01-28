@@ -1,22 +1,13 @@
 import './App.css'
+import TwitterFollowCard from './TwitterFollowCard'
 function App() {
+
   return (
-    <>
-     <article>
-      <header>
-        <img src="https://github.com/Andonny1up.png" alt="El avatar de andoni" />
-        <div>
-          <strong>Andoni Barba Noe</strong>
-          <span>@Andonny1up</span>
-        </div>
-      </header>
-      <aside>
-        <button>
-          seguir
-        </button>
-      </aside>
-     </article>
-    </>
+    <section className='App'>
+      <TwitterFollowCard username="Andonny1up" name="Andoni Barba Noe"/>
+      <TwitterFollowCard username="agustinmejia" name="Agustin Mejia"/>
+      <TwitterFollowCard username="ignacio1997img" name="Ignacio Molina Guzman"/>
+    </section>
   )
 }
 
