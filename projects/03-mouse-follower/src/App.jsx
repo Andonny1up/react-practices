@@ -18,6 +18,17 @@ function App() {
       window.removeEventListener('pointermove',handleMove)
     }
   },[enabled])
+
+  useEffect(()=>{
+    if (enabled) {
+      document.body.classList.add('no-cursor')
+    }
+
+    return () => {
+      document.body.classList.remove('no-cursor')
+    }
+
+  },[enabled])
   return (
     <main>
       <div style={
