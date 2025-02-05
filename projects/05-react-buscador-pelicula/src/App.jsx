@@ -1,8 +1,9 @@
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef,useCallback } from 'react'
 import './App.css'
 import Movies from './components/Movies'
 import useMovies from './hooks/useMovies'
+import debounce from 'just-debounce-it'
 
 const API = 'https://www.omdbapi.com/?apikey=82cfb0e1&s=tumedia'
 
@@ -37,9 +38,14 @@ function useSearch () {
 }
 
 function App() {
-  const { movies } = useMovies()
+  const [sort,setSort] = useState(false)
   const {search,updateSearch,error} = useSearch()
+  const { movies, getMovies, loading } = useMovies({search, sort})
 
+  const debouncedGetMovies = useCallback(debounce(({search}) => {
+    console.log('search',search);
+    getMovies({search})
+  },500),[getMovies])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -47,13 +53,23 @@ function App() {
     
     // const data = new FormData(event.target)
     // const query = data.get('query')
-    console.log(search);
+    getMovies({search})
   }
+
+  const handleSort = () =>{
+    setSort(!sort)
+  }
+
   const handleChange = (event) => {
-    if (event.target.value != ' ') {
-      updateSearch(event.target.value)
+    const newSearch = event.target.value
+    if (newSearch != ' ') {
+      updateSearch(newSearch)
+      debouncedGetMovies({search: newSearch})
     }
   }
+  useEffect(() =>{
+    console.log('new getMovies receives');
+  },[getMovies])
 
   return (
     <div className='page'>
@@ -61,12 +77,13 @@ function App() {
       <h1>Buscador de peliculas</h1>
        <form className='form' on onSubmit={handleSubmit}>
           <input onChange={handleChange} value={search} name='query' type="text" placeholder='Avengers, Star Wars' />
+          <input type="checkbox" onChange={handleSort} checked={sort} />
           <button type='submit'>Buscar</button>
        </form>
        {error && <p style={{color: 'red'}}>{error}</p>}
      </header>
      <main>
-        <Movies movies={movies}/>
+        {loading ? <p>Cargando...</p>:<Movies movies={movies}/>}
      </main>
     </div>
   )
