@@ -24,7 +24,7 @@ const Products = ({products}) => {
                                 onClick={() => isProductInCart ? removeFromCart(product): addToCart(product)} 
                                 style={{
                                     color: 'white',
-                                    backgroundColor
+                                    backgroundColor: isProductInCart ? 'red': '#09f'
                                 }}
                             >
                                 {
