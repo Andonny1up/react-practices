@@ -1,20 +1,16 @@
+import { lazy, Suspense } from 'react'
+
 import './App.css'
 import { Router } from './Router'
 import HomePage from './pages/home'
-import AboutPage from './pages/About'
 import SearchPage from './pages/Search'
 import Page404 from './pages/404'
 
+import Route from './Route'
+
+const LazyAboutPage = lazy(() => import('./pages/About')) // import dinamico
 
 const routes = [
-  {
-    path: '/',
-    Component: HomePage
-  },
-  {
-    path: '/about',
-    Component: AboutPage
-  },
   {
     path: '/search/:query',
     Component: SearchPage
@@ -25,7 +21,12 @@ function App() {
   
   return (
     <main>
-      <Router routes={routes} defaultComponent={Page404}></Router>
+      <Suspense>
+      <Router routes={routes} defaultComponent={Page404}>
+        <Route path='/' Component={HomePage}/>
+        <Route path='/about' Component={LazyAboutPage}/>
+      </Router>
+      </Suspense>
     </main>
   )
 }

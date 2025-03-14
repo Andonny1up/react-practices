@@ -1,9 +1,7 @@
 import React from 'react'
 
 function Route({path,component}) {
-  return (
-    <div>Route</div>
-  )
+  return null
 }
 
 export default Route
